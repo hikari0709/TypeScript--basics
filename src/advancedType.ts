@@ -82,14 +82,61 @@ class Mirror<T> {
 
 // 型アサーション　型の変換（型に互換性がある場合に限る）
 
-let name: any = 'hikari';
+// let name: any = 'hikari';
 // let length = name.length;
 
 // 型アサーション
 // let length = name.length as number;
 
 // name自体をアサーションする
-let length = (name as string).length;
+// let length = (name as string).length;
 
 // 上と同じ効果を得られるが非推奨。JSXの記法とよく似ているため
 // let length = (<string>name).length;
+
+// const アサーション　データの値の書き換えを行わないことをコンパイラーに伝える
+let name = 'hikari';
+
+name = 'teru';
+
+let nickname = 'tani' as const;
+// error
+// nickname = 'terumae';
+// ok
+nickname = 'tani';
+
+// as constで定数であるとアサーションしている。letで宣言しているため再代入は可能だけど、もとのテキスト以外は受け付けないようになっている
+
+// objectも}の後ろにas const をつけることで値を変えられないようになる　→ readonlyになる。全てにreadonlyを書かなくてもよくなる。
+// ネストされたすべての要素に適用される
+// let profile = {
+//   name: 'hikari',
+//   height: 170,
+// } as const;
+
+// profile.name = 'teru';
+// profile.height = 175;
+
+// Nullable Types
+// 入ってくる値が不確定な場合に利用する型
+// tsconfigに「strictNullChecks": true」が設定されているため、numberにnullを設定するとエラーになる
+// 設定を変えてしまうとどんな値にもnullを設定できてしまうので絶対にやらないこと
+// union型を使うことでnullを許容することができる
+// let profile: { name: string; age: number | null } = {
+//   name: 'hikari',
+//   age: null
+// };
+
+// インデックスシグネチャ
+// 内容が決まっていないオブジェクトに新しいプロパティを追加していきたいときに利用する
+
+interface Profile {
+  name: string;
+  underTwenty: boolean;
+  [index: string]: string | number | boolean;
+}
+
+let profile: Profile = {name: 'hikari', underTwenty: false };
+
+profile.name = 'hikari';
+profile.age = 32;
